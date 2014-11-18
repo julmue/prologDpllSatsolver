@@ -1,9 +1,10 @@
 :- module(parser_internal,[ rec_expr/1,
-                            expr/2,
-                            expr_rest/3,
-                            v/2,
-                            ver/2,
-                            fal/2,
+                            parse_expr/2,
+                            expr/3,
+                            expr_rest/4,
+                            v/3,
+                            ver/3,
+                            fal/3,
                             neg/2,
                             and/2,
                             or/2,
@@ -51,45 +52,48 @@
 */
 
 %% expresion recogniser
-rec_expr(E) :-
-    expr(E,[]).
+rec_expr(Expr) :-
+    expr(_,Expr,[]).
+
+parse_expr(ParseTree,Expr) :-
+    expr(ParseTree,Expr,[]).
 
 %%% production rules
 %
 %%%% logical variables
-expr --> v, expr_rest(end).
-expr --> v, expr_rest(and).
-expr --> v, expr_rest(or).
+expr(v(X))          --> v(X), expr_rest(end,_).
+expr(and(v(X),Y))   --> v(X), expr_rest(and,Y).
+expr(or(v(X),Y))    --> v(X), expr_rest(or,Y).
 
 %%%% junctors of arity 0
-expr --> ver, expr_rest(end).
-expr --> ver, expr_rest(and).
-expr --> ver, expr_rest(or).
+expr(ver(X))        --> ver(X), expr_rest(end,_).
+expr(and(ver(X),Y)) --> ver(X), expr_rest(and).
+expr(or(ver(X),Y))  --> ver(X), expr_rest(or).
 
-expr --> fal, expr_rest(end).
-expr --> fal, expr_rest(and).
-expr --> fal, expr_rest(or).
+expr(fal(X))        --> fal(X), expr_rest(end,_).
+expr(and(fal(X),Y)) --> fal(X), expr_rest(and,Y).
+expr(or(fal(X),Y))  --> fal(X), expr_rest(or,Y).
 
 %%%% junctors of arity 1
-expr --> neg, expr, expr_rest(end).
-expr --> neg, expr, expr_rest(and).
-expr --> neg, expr, expr_rest(or).
+expr(neg(X))        --> neg, expr(X), expr_rest(end,_).
+expr(and(neg(X),Y)) --> neg, expr(X), expr_rest(and,Y).
+expr(or(neg(X),Y))  --> neg, expr(X), expr_rest(or,Y).
 
 %%%%% parentheses
-expr --> l_par, expr, r_par, expr_rest(end).
-expr --> l_par, expr, r_par, expr_rest(and).
-expr --> l_par, expr, r_par, expr_rest(or).
+expr(X)             --> l_par, expr(X), r_par, expr_rest(end,_).
+expr(and(X,Y))      --> l_par, expr(X), r_par, expr_rest(and,Y).
+expr(or(X,Y))       --> l_par, expr(X), r_par, expr_rest(or,Y).
 
 %%% junctors of arity 2
-expr_rest(end) --> [].
-expr_rest(and) --> and, expr, expr_rest(_).
-expr_rest(or) --> or, expr, expr_rest(_).
+expr_rest(end,[])      --> [].
+expr_rest(and,Y)      --> and, expr(Y), expr_rest(_,_).
+expr_rest(or,Y)       --> or, expr(Y), expr_rest(_,_).
 
 %%% alphabet
-v --> [X].
+v(X) --> [X].
 
-ver --> ['T'].
-fal --> ['F'].
+ver(['T']) --> ['T'].
+fal(['F']) --> ['F'].
 
 neg --> ['~'].
 
