@@ -47,7 +47,13 @@ test(vars_in_parsetreelist_2, nondet) :-
     member(v(y),Vars),
     length(Vars,2).
 
-
-
 :- end_tests(vars_in_parsetree).
 
+
+:- begin_tests(dpll).
+
+tests(dpll_1) :-
+    dpll('T','T').
+
+
+:- end_tests(dpll).

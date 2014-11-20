@@ -1,5 +1,6 @@
 :- module(sat_internal,[    vars_in_parsetree/2,
-                            vars_in_parsetreelist/2
+                            vars_in_parsetreelist/2,
+                            dpll/2
                         ]).
 
 :- use_module(parser_internal).
@@ -43,4 +44,27 @@ vars_in_parsetreelist(Vars,[ParseTree1 | Rem ]) :-
     vars_in_parsetreelist(VarsRem, Rem),
     flatten([Vars1 | VarsRem], IVars),
     list_to_set(IVars,Vars).
+
+pair_val_var(X,val_var(X,Y)) :-
+    nonvar(X),
+    var(Y).
+
+pair_val_var_list([],[]) :- !.
+pair_val_var_list([Val| ValListRem], [ Pair | PairListRem]) :-
+    pair_val_var(Val,Pair),
+    pair_val_var_list(ValListRem,PairListRem).
+
+
+dpll(Expr,Result) :-
+    parse_expr(ParseTree,Expr),
+    simpl(ParseTree,IParseTree),
+    vars_in_parsetree(Vars,IParseTree),
+    pair_val_var_list(Vars,Pairs),
+    dpll(Pairs,IParseTree,Result).
+dpll([ val_var(Val,Var)| PairsRem],ParseTree,Result) :-
+    boolean(Var),
+    substitution(Val,Var,ParseTree,IParseTree),
+    simpl(IParseTree,IIParseTree),
+    dpll(PairsRem,IIParseTree,Result).
+dpll(_,'T','T').
 
