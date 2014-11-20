@@ -3,7 +3,6 @@
 % simplification of formula
 
 %% determined simplification
-
 simpl(or('T',_), 'T') :- !.
 simpl(or(_,'T'), 'T') :- !.
 simpl(or('F','F'), 'F') :- !.
@@ -17,39 +16,57 @@ simpl(not('T'),'F') :-!.
 
 
 %% non-determined simplification
-simpl(or(X,'F'), X1) :- simpl(or('F',X), X1), !.
-simpl(or('F',X), X1) :-
+simpl(or(X,'F'), Res) :- simpl(or('F',X), Res), !.
+simpl(or('F',X), Res) :-
     dif(X,'T'),
     dif(X,'F'),
     !,
     simpl(X,IX),
     ( (IX = 'T' ; IX = 'F') ->
-        simpl(or('F',IX),X1)
+        simpl(or('F',IX),Res)
     ;
-        X1 = or('F',IX)
+        Res = or('F',IX)
     ).
 
-simpl(and(X,'T'), X1) :- simpl(and('T',X), X1), !.
-simpl(and('T',X), X1) :-
+simpl(and(X,'T'), Res) :- simpl(and('T',X), Res), !.
+simpl(and('T',X), Res) :-
     dif(X,'T'),
     dif(X,'F'),
     !,
     simpl(X,IX),
     ( (IX = 'T' ; IX = 'F') ->
-        simpl(and('T',IX),X1)
+        simpl(and('T',IX),Res)
     ;
-        X1 = and('T', IX)
+        Res = and('T', IX)
     ).
 
-simpl(not(X),X1) :-
+simpl(Term, Res) :-
+    functor(Term,F,2),
+    arg(1,Term,X),
+    arg(2,Term,Y),
+    \+ member(X,['T','F']),
+    \+ member(Y,['T','F']),
+    !,
+    simpl(X,X1),
+    simpl(Y,Y1),
+    functor(Term1,F,2),
+    arg(1,Term1,X1),
+    arg(2,Term1,Y1),
+    ( (member(X1,['T','F']); member(Y1,['T','F'])) ->
+        simpl(Term1,Res)
+    ;
+        Res = Term1
+    ).
+
+simpl(not(X),Res) :-
 	dif(X,'T'),
 	dif(X,'F'),
 	simpl(X,IX),
 
     ( (IX = 'T' ; IX = 'F') ->
-        simpl(not(IX),X1)
+        simpl(not(IX),Res)
 	;
-		X1 = IX
+		Res = IX
 	).
 
 
