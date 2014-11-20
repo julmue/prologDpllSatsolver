@@ -1,3 +1,5 @@
+:- module(sat_internal).
+
 :- use module(parser_internal).
 :- use module(simplification).
 :- use module(substitution).
