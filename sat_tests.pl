@@ -52,8 +52,36 @@ test(vars_in_parsetreelist_2, nondet) :-
 
 :- begin_tests(dpll).
 
-tests(dpll_1) :-
-    dpll('T','T').
+test(dpll_1) :-
+    dpll(['T']).
+
+test(dpll_2,fail) :-
+    dpll(['F']).
+
+test(dpll_3,fail) :-
+    dpll(['F','&&','T']).
+
+test(dpll_4) :-
+    dpll(['F','||','T']).
+
+test(dpll_5) :-
+    dpll([v(x)]).
+
+test(dpll_6) :-
+    dpll([v(x),'&&','T']).
+
+test(dpll_7,fail) :-
+    dpll([v(x),'&&','F']).
+
+test(dpll_8) :-
+    dpll([v(x),'||','F']).
+
+test(dpll_9,fail) :-
+    dpll([v(x),'&&','(','~',v(x),')']).
+
+test(dpll_9) :-
+    dpll([v(x),'&&',v(x)]).
+
 
 
 :- end_tests(dpll).
