@@ -1,4 +1,4 @@
-:- module(sat_internal,[vars_in_parstree/2]).
+:- module(sat_internal,[vars_in_parsetree/2]).
 
 :- use_module(parser_internal).
 :- use_module(simplification).
@@ -25,5 +25,5 @@ function DPLL(Φ)
 */
 
 
-vars_in_parstree(Vars,ParseTree) :-
-    x = x.
+vars_in_parsetree(Vars,ParseTree) :-
+    Vars = ParseTree.
