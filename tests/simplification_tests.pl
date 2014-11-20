@@ -1,4 +1,4 @@
-:- use_module(simplification).
+:- use_module('../src/simplification').
 
 :- begin_tests(simpl).
 

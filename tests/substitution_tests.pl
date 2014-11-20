@@ -1,4 +1,4 @@
-:- use_module(substitution).
+:- use_module('../src/substitution').
 
 
 :- begin_tests(substitution).

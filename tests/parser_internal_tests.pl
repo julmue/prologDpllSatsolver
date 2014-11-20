@@ -1,4 +1,4 @@
-:- use_module(parser_internal).
+:- use_module('../src/parser_internal').
 
 
 :- begin_tests(recogniser).

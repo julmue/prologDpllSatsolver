@@ -1,4 +1,4 @@
-:- use_module(sat_internal).
+:- use_module('../src/sat_internal').
 
 :- begin_tests(vars_in_parsetree).
 
