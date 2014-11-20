@@ -16,21 +16,21 @@ No further simplification is implemented e.g. DeMorgan-laws.
  */
 
 %% determined simplification
-simpl(or('T',_), 'T') :- !.
-simpl(or(_,'T'), 'T') :- !.
-simpl(or('F','F'), 'F') :- !.
+simpl(or('T',_),'T') :- !.
+simpl(or(_,'T'),'T') :- !.
+simpl(or('F','F'),'F') :- !.
 
-simpl(and('T','T'), 'T') :- !.
-simpl(and('F',_), 'F') :-!.
-simpl(and(_,'F'), 'F') :-!.
+simpl(and('T','T'),'T') :- !.
+simpl(and('F',_),'F') :-!.
+simpl(and(_,'F'),'F') :-!.
 
 simpl(not('F'),'T') :-!.
 simpl(not('T'),'F') :-!.
 
 
 %% non-determined simplification
-simpl(or(X,'F'), Res) :- simpl(or('F',X), Res), !.
-simpl(or('F',X), Res) :-
+simpl(or(X,'F'),Res) :- simpl(or('F',X), Res), !.
+simpl(or('F',X),Res) :-
     dif(X,'T'),
     dif(X,'F'),
     !,
@@ -41,8 +41,8 @@ simpl(or('F',X), Res) :-
         Res = or('F',IX)
     ).
 
-simpl(and(X,'T'), Res) :- simpl(and('T',X), Res), !.
-simpl(and('T',X), Res) :-
+simpl(and(X,'T'),Res) :- simpl(and('T',X), Res), !.
+simpl(and('T',X),Res) :-
     dif(X,'T'),
     dif(X,'F'),
     !,
@@ -50,7 +50,7 @@ simpl(and('T',X), Res) :-
     ( (IX = 'T' ; IX = 'F') ->
         simpl(and('T',IX),Res)
     ;
-        Res = and('T', IX)
+        Res = and('T',IX)
     ).
 
 simpl(Term, Res) :-

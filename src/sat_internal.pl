@@ -46,7 +46,7 @@ This algorithm is based on the DPLL-algorithm with some slight variations.
 vars_in_parsetree(Vars,v(X)) :-
     Vars = [v(X)], !.
 vars_in_parsetree(Vars,ParseTree) :-
-    ParseTree =.. [ Functor | Args ],
+    ParseTree =.. [Functor|Args],
     dif(Functor,v),
     vars_in_parsetreelist(IVars,Args),
     list_to_set(IVars,Vars).
@@ -57,11 +57,11 @@ vars_in_parsetree(Vars,ParseTree) :-
  */
 
 vars_in_parsetreelist([],[]) :- !.
-vars_in_parsetreelist(Vars,[ParseTree1 | Rem ]) :-
+vars_in_parsetreelist(Vars,[ParseTree1|Rem]) :-
     !,
     vars_in_parsetree(Vars1,ParseTree1),
-    vars_in_parsetreelist(VarsRem, Rem),
-    flatten([Vars1 | VarsRem], IVars),
+    vars_in_parsetreelist(VarsRem,Rem),
+    flatten([Vars1|VarsRem],IVars),
     list_to_set(IVars,Vars).
 
 pair_val_var(X,val_var(X,Y)) :-
@@ -69,7 +69,7 @@ pair_val_var(X,val_var(X,Y)) :-
     var(Y).
 
 pair_val_var_list([],[]) :- !.
-pair_val_var_list([Val| ValListRem], [ Pair | PairListRem]) :-
+pair_val_var_list([Val|ValListRem],[Pair|PairListRem]) :-
     pair_val_var(Val,Pair),
     pair_val_var_list(ValListRem,PairListRem).
 
@@ -84,7 +84,7 @@ dpll(Expr) :-
     vars_in_parsetree(Vars,IParseTree),
     pair_val_var_list(Vars,Pairs),
     dpll(Pairs,IParseTree).
-dpll([ val_var(Val,Var)| PairsRem],ParseTree) :-
+dpll([ val_var(Val,Var)|PairsRem],ParseTree) :-
     boolean(Var),
     substitution(Val,Var,ParseTree,IParseTree),
     simpl(IParseTree,IIParseTree),
