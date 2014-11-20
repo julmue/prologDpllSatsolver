@@ -66,13 +66,13 @@ expr(and(v(X),Y))   --> v(X), expr_rest(and,Y).
 expr(or(v(X),Y))    --> v(X), expr_rest(or,Y).
 
 %%%% junctors of arity 0
-expr(ver(X))        --> ver(X), expr_rest(end,_).
-expr(and(ver(X),Y)) --> ver(X), expr_rest(and,Y).
-expr(or(ver(X),Y))  --> ver(X), expr_rest(or,Y).
+expr(X)        --> ver(X), expr_rest(end,_).
+expr(and(X,Y)) --> ver(X), expr_rest(and,Y).
+expr(or(X,Y))  --> ver(X), expr_rest(or,Y).
 
-expr(fal(X))        --> fal(X), expr_rest(end,_).
-expr(and(fal(X),Y)) --> fal(X), expr_rest(and,Y).
-expr(or(fal(X),Y))  --> fal(X), expr_rest(or,Y).
+expr(X)        --> fal(X), expr_rest(end,_).
+expr(and(X,Y)) --> fal(X), expr_rest(and,Y).
+expr(or(X,Y))  --> fal(X), expr_rest(or,Y).
 
 %%%% junctors of arity 1
 expr(neg(X))        --> neg, expr(X), expr_rest(end,_).
@@ -90,10 +90,10 @@ expr_rest(and,Y)      --> and, expr(Y), expr_rest(_,_).
 expr_rest(or,Y)       --> or, expr(Y), expr_rest(_,_).
 
 %%% alphabet
-v(X) --> [X].
+v(X) --> [X],{ dif(X,'T'), dif(X,'F') }.
 
-ver(['T']) --> ['T'].
-fal(['F']) --> ['F'].
+ver('T') --> ['T'].
+fal('F') --> ['F'].
 
 neg --> ['~'].
 
