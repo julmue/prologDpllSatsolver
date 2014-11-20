@@ -74,13 +74,13 @@ test(dpll_7,fail) :-
     dpll([v(x),'&&','F']).
 
 test(dpll_8) :-
-    dpll([v(x),'||','F']).
+    dpll([x,'||','F']).
 
 test(dpll_9,fail) :-
-    dpll([v(x),'&&','(','~',v(x),')']).
+    dpll([x,'&&','(','~',x,')']).
 
-test(dpll_9) :-
-    dpll([v(x),'&&',v(x)]).
+test(dpll_10) :-
+    dpll([x,'&&',x]).
 
 
 
