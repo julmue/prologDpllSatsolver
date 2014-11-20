@@ -1,4 +1,6 @@
-:- module(sat_internal,[vars_in_parsetree/2]).
+:- module(sat_internal,[    vars_in_parsetree/2,
+                            vars_in_parsetreelist/2
+                        ]).
 
 :- use_module(parser_internal).
 :- use_module(simplification).
@@ -25,5 +27,20 @@ function DPLL(Φ)
 */
 
 
+vars_in_parsetree(Vars,v(X)) :-
+    Vars = [v(X)], !.
 vars_in_parsetree(Vars,ParseTree) :-
-    Vars = ParseTree.
+    ParseTree =.. [ Functor | Args ],
+    dif(Functor,v),
+    vars_in_parsetreelist(IVars,Args),
+    list_to_set(IVars,Vars).
+
+
+vars_in_parsetreelist([],[]) :- !.
+vars_in_parsetreelist(Vars,[ParseTree1 | Rem ]) :-
+    !,
+    vars_in_parsetree(Vars1,ParseTree1),
+    vars_in_parsetreelist(VarsRem, Rem),
+    flatten([Vars1 | VarsRem], IVars),
+    list_to_set(IVars,Vars).
+
