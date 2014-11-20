@@ -67,8 +67,8 @@ expr(or(v(X),Y))    --> v(X), expr_rest(or,Y).
 
 %%%% junctors of arity 0
 expr(ver(X))        --> ver(X), expr_rest(end,_).
-expr(and(ver(X),Y)) --> ver(X), expr_rest(and).
-expr(or(ver(X),Y))  --> ver(X), expr_rest(or).
+expr(and(ver(X),Y)) --> ver(X), expr_rest(and,Y).
+expr(or(ver(X),Y))  --> ver(X), expr_rest(or,Y).
 
 expr(fal(X))        --> fal(X), expr_rest(end,_).
 expr(and(fal(X),Y)) --> fal(X), expr_rest(and,Y).
