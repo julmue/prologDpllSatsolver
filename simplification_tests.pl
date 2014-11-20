@@ -63,6 +63,8 @@ test(or_7) :-
 test(or_8) :-
     simpl(or(v(x),'F'),or('F',v(x))).
 
+test(or_9) :-
+    simpl(or(v(x),v(y)),or(v(x),v(y))).
 
 test(and_7) :-
     simpl(and('T',v(x)),and('T',v(x))).
@@ -70,5 +72,7 @@ test(and_7) :-
 test(and_8) :-
     simpl(and(v(x),'T'),and('T',v(x))).
 
+test(and_10) :-
+    simpl(and(v(x),v(y)),and(v(x),v(y))).
 
 :- end_tests(simpl).
