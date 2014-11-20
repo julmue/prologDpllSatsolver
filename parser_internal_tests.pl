@@ -38,15 +38,9 @@ test(expr_6) :-
 :- end_tests(recogniser).
 
 
-/*
+:- begin_tests(parse_expr).
 
-test(recogniser_var_2) :-
-    expr(v('x'),['x'],[]).
+test(parse_expr_1) :-
+    parse_expr('T',['T']).
 
-test(parser_neg_2) :-
-    expr(neg(v('x')),['~','x'],[]).
-
-
-*/
-
-
+:- end_tests(parse_expr).
