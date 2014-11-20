@@ -7,27 +7,42 @@
 :- use_module(simplification).
 :- use_module(substitution).
 
-/*
+/** <module> Davis–Putnam–Logemann–Loveland (DPLL) algorithm.
 
-algorithm DPLL
-  input: a set of clauses Φ.
-  output: a Truth Value.
+This algorithm is based on the DPLL-algorithm with some slight variations.
 
-function DPLL(Φ)
-   if Φ is a consistent set of literals
-       then return true;
-   if Φ contains an empty clause
-       then return false;
-   for every unit clause l in Φ
-      Φ ← unit-propagate(l, Φ);
-   for every literal l that occurs pure in Φ
-      Φ ← pure-literal-assign(l, Φ);
-   l ← choose-literal(Φ);
-   return DPLL(Φ ∧ l) or DPLL(Φ ∧ not(l));
+==
+    algorithm DPLL
+        input:  a logical expression Expr.
+        output: if Expr is satisfiable 'True', 'False' otherwise.
+
+    dpll(Expr)
+        //  initialization
+        1.  Expr is parsed into ParseTree.
+        2.  ParseTree is simplified.
+        3.  The List Vars of free variables in ParseTree is extracted.
+        //  main searching
+        4.  while ParseTree != True and Vars != []
+            4.1 assign a boolean value V to the variable in head of Vars HVars.
+                -> set choicepoint.
+            4.2 substitute V for HVars in Expr.
+            4.3 simplifiy.
+        5.  if ParseTree == True
+              return True.
+            else
+                if there are choicepoints
+                    backtrack to last choicepoint.
+                else
+                    return False.
+
+==
 
 */
 
-
+/** vars_in_parsetree(-Vars:list,+ParseTree:parse_tree).
+ *
+ * Extracts a list Vars of free variables form ParseTree.
+ */
 vars_in_parsetree(Vars,v(X)) :-
     Vars = [v(X)], !.
 vars_in_parsetree(Vars,ParseTree) :-
@@ -36,6 +51,10 @@ vars_in_parsetree(Vars,ParseTree) :-
     vars_in_parsetreelist(IVars,Args),
     list_to_set(IVars,Vars).
 
+/** vars_in_parsetreelist(-Vars:list,+ParseTree:parse_tree_list).
+ *
+ * Extracts a list Vars of free variables form a list of parse trees ParseTreeList.
+ */
 
 vars_in_parsetreelist([],[]) :- !.
 vars_in_parsetreelist(Vars,[ParseTree1 | Rem ]) :-
@@ -54,6 +73,10 @@ pair_val_var_list([Val| ValListRem], [ Pair | PairListRem]) :-
     pair_val_var(Val,Pair),
     pair_val_var_list(ValListRem,PairListRem).
 
+/** dpll(+Expr:expression).
+ *
+ * Davis–Putnam–Logemann–Loveland (DPLL) algorithm as depicted in the module description.
+ */
 
 dpll(Expr) :-
     parse_expr(ParseTree,Expr),

@@ -1,9 +1,13 @@
 :- module(substitution,[substitution/4]).
 
-/*
-substitute(Old,New,OldTerm,NewTerm) :-
-    NewTerm is the result of replacing all occurrences of Old in OldTerm by New.
+/** <module> Simultaneous Substitution Of Subterms In Prolog-Terms.
 */
+
+/**
+ * substitution(+Old:term,+New:term,+OldTerm:term,-NewTerm:term).
+ *
+ * NewTerm is the result of replacing all occurrences of Old in OldTerm by New.
+ */
 
 substitution(Old,New,Old,New) :- !.
 substitution(Old,_,Term,Term) :-

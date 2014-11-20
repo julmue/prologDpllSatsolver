@@ -1,6 +1,19 @@
 :- module(simplification,[simpl/2]).
 
-% simplification of formula
+/** <module> Simplification Of Logical Terms Represented As Parse Trees.
+
+Simplification of logical terms represented as parsetrees.
+According to the truth functions of the logical operators AND, OR, NOT.
+No further simplification is implemented e.g. DeMorgan-laws.
+*/
+
+
+/**
+ * simpl(+Old:parse_tree,?New:parse_tree).
+ *
+ * Old is simplified to New according to the truth functions of basic logic operators.
+ *
+ */
 
 %% determined simplification
 simpl(or('T',_), 'T') :- !.
